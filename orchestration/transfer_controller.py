@@ -13,8 +13,8 @@ from sfapi_client import Client
 from sfapi_client.compute import Machine
 
 
-# We should have a more generic Config class that can be used across beamlines...
-from orchestration.flows.bl832.config import Config832
+# Import the generic Beamline configuration class.
+from orchestration.config import BeamlineConfig
 from orchestration.globus.transfer import GlobusEndpoint, start_transfer
 
 logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ class TransferController(Generic[Endpoint], ABC):
     """
     def __init__(
         self,
-        config: Config832
+        config: BeamlineConfig
     ) -> None:
         self.config = config
 
@@ -134,7 +134,7 @@ class TransferController(Generic[Endpoint], ABC):
 class GlobusTransferController(TransferController[GlobusEndpoint]):
     def __init__(
         self,
-        config: Config832
+        config: BeamlineConfig
     ) -> None:
         super().__init__(config)
     """
@@ -198,7 +198,7 @@ class GlobusTransferController(TransferController[GlobusEndpoint]):
 class SimpleTransferController(TransferController[FileSystemEndpoint]):
     def __init__(
         self,
-        config: Config832
+        config: BeamlineConfig
     ) -> None:
         super().__init__(config)
     """
@@ -265,7 +265,7 @@ class CFSToHPSSTransferController(TransferController[HPSSEndpoint]):
     def __init__(
         self,
         client: Client,
-        config: Config832
+        config: BeamlineConfig
     ) -> None:
         super().__init__(config)
         self.client = client
@@ -458,7 +458,7 @@ class HPSSToCFSTransferController(TransferController[HPSSEndpoint]):
     def __init__(
         self,
         client: Client,
-        config: Config832
+        config: BeamlineConfig
     ) -> None:
         super().__init__(config)
     """
@@ -484,7 +484,7 @@ class CopyMethod(Enum):
 
 def get_transfer_controller(
     transfer_type: CopyMethod,
-    config: Config832
+    config: BeamlineConfig
 ) -> TransferController:
     """
     Get the appropriate transfer controller based on the transfer type.
@@ -517,6 +517,7 @@ def get_transfer_controller(
 
 
 if __name__ == "__main__":
+    from orchestration.flows.bl832.config import Config832
     config = Config832()
     transfer_type = CopyMethod.GLOBUS
     globus_transfer_controller = get_transfer_controller(transfer_type, config)
