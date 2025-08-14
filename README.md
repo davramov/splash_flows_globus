@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="splash_flows_logo_text.png" alt="Arroyo Logo" width="150"/>
+</p>
+
 # Splash Flows Globus
 
 This repo contains configuration and code for Prefect workflows to move data and run computing tasks.  Many of the workflows use Globus for data movement between local servers and back and forth to NERSC.
